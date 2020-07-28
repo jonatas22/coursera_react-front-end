@@ -29,7 +29,7 @@ const minLength = (len) => (val) => (val) && (val.length >= len);
 
         handleSubmit(values) {
             this.toggleCommentModal();
-            alert("Form data sent: " + JSON.stringify(values));
+            this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
         }        
 
         render() {
@@ -55,8 +55,8 @@ const minLength = (len) => (val) => (val) && (val.length >= len);
                                         </Control.select>
                                 </div>
                                 <div className="form-group">
-                                    <Label htmlFor="fullname">Your Name</Label>
-                                    <Control.text model=".fullname" id="fullname" name="fullname"
+                                    <Label htmlFor="author">Your Name</Label>
+                                    <Control.text model=".author" id="author" name="author"
                                                 placeholder="Your Name" className="form-control"
                                                 validators={{
                                                     required, minLength: minLength(3), maxLength: maxLength(15)
@@ -64,7 +64,7 @@ const minLength = (len) => (val) => (val) && (val.length >= len);
                                                  />
                                     <Errors
                                             className="text-danger"
-                                            model=".fullname"
+                                            model=".author"
                                             show="touched"
                                             messages={{
                                                 required: 'Required',
@@ -92,7 +92,7 @@ const minLength = (len) => (val) => (val) && (val.length >= len);
                                         }}
                                      />                                        
                                 </div>
-                                <Button type="submit" color="bg-primary">Login</Button>
+                                <Button type="submit" color="bg-primary">Submit</Button>
                             </LocalForm>
                         </ModalBody>
                     </Modal>
@@ -120,7 +120,7 @@ const minLength = (len) => (val) => (val) && (val.length >= len);
         }
     }
     
-    function RenderComments({comments}) {
+    function RenderComments({comments, addComment, dishId}) {
         if (comments != null) {
             return (
                     <React.Fragment>
@@ -134,7 +134,7 @@ const minLength = (len) => (val) => (val) && (val.length >= len);
                                         </ul>
                                     )
                                 })}
-                            <CommentForm />
+                            <CommentForm dishId={dishId} addComment={addComment}/>
                         </div>                        
                     </React.Fragment>
             );
@@ -161,7 +161,9 @@ const minLength = (len) => (val) => (val) && (val.length >= len);
                 </div>
                 <div className="row">
                     <RenderDish dish={props.dish} />
-                    <RenderComments comments={props.comments} />
+                    <RenderComments comments={props.comments}
+                                    addComment={props.addComment}
+                                    dishId={props.dish.id} />
                 </div>    
             </div>);
     }
