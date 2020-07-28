@@ -17,6 +17,7 @@ const minLength = (len) => (val) => (val) && (val.length >= len);
             }
 
             this.toggleCommentModal = this.toggleCommentModal.bind(this);
+            this.handleSubmit = this.handleSubmit.bind(this);
             
         }
 
@@ -25,6 +26,11 @@ const minLength = (len) => (val) => (val) && (val.length >= len);
                 isCommentModalOpen: !this.state.isCommentModalOpen
             })
         }
+
+        handleSubmit(values) {
+            this.toggleCommentModal();
+            alert("Form data sent: " + JSON.stringify(values));
+        }        
 
         render() {
             return(
@@ -35,11 +41,12 @@ const minLength = (len) => (val) => (val) && (val.length >= len);
                     <Modal isOpen={this.state.isCommentModalOpen} toggle={this.toggleCommentModal}>
                         <ModalHeader toggle={this.toggleCommentModal}>Submit Comment</ModalHeader>
                         <ModalBody>
-                            <LocalForm >
+                            <LocalForm onSubmit={(values) => this.handleSubmit(values)}>
                                 <div className="form-group">
                                     <Label htmlFor="rating">Rating</Label>
                                         <Control.select model=".rating" name="rating"
-                                                className="form-control">
+                                                className="form-control"
+                                                defaultValue="5">
                                                 <option>1</option>
                                                 <option>2</option>
                                                 <option>3</option>
@@ -85,7 +92,7 @@ const minLength = (len) => (val) => (val) && (val.length >= len);
                                         }}
                                      />                                        
                                 </div>
-                                <Button type="submit" value="submit" color="bg-primary">Login</Button>
+                                <Button type="submit" color="bg-primary">Login</Button>
                             </LocalForm>
                         </ModalBody>
                     </Modal>
@@ -142,12 +149,12 @@ const minLength = (len) => (val) => (val) && (val.length >= len);
     const DishDetail = (props) => {
         return (
             <div className='container'>
-                <div class="row">
+                <div className="row">
                     <Breadcrumb>
                         <BreadcrumbItem><Link to='/menu'>Menu</Link></BreadcrumbItem>
                         <BreadcrumbItem ative>{props.dish.name}</BreadcrumbItem>
                     </Breadcrumb>
-                    <div class="col-12">
+                    <div className="col-12">
                         <h3>{props.dish.name}</h3>
                         <hr />
                     </div>

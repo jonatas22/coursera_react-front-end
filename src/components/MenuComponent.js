@@ -28,12 +28,12 @@ import { Link } from 'react-router-dom';
     
         return ( 
             <div className="container">
-                <div class="row">
+                <div className="row">
                     <Breadcrumb>
                         <BreadcrumbItem><Link to='/home'>Home</Link></BreadcrumbItem>
                         <BreadcrumbItem ative>Menu</BreadcrumbItem>
                     </Breadcrumb>
-                    <div class="col-12">
+                    <div className="col-12">
                         <h3>Menu</h3>
                         <hr />
                     </div>
