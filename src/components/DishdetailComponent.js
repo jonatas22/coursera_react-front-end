@@ -1,6 +1,98 @@
-import React from 'react';
-import {Card, CardImg, CardBody, CardText, CardTitle, Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import React, { Component } from 'react';
+import {Card, CardImg, CardBody, CardText, CardTitle, Breadcrumb, BreadcrumbItem, Button,
+        Modal, ModalHeader, ModalBody, Label} from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { Control, LocalForm, Errors } from 'react-redux-form';
+
+const required = (val) => val && val.length;
+const maxLength = (len) => (val) => !(val) || (val.length <= len);
+const minLength = (len) => (val) => (val) && (val.length >= len);
+
+    class CommentForm extends Component {
+        constructor(props) {
+            super(props);
+
+            this.state = {
+                isCommentModalOpen: false
+            }
+
+            this.toggleCommentModal = this.toggleCommentModal.bind(this);
+            
+        }
+
+        toggleCommentModal() {
+            this.setState({
+                isCommentModalOpen: !this.state.isCommentModalOpen
+            })
+        }
+
+        render() {
+            return(
+                <React.Fragment>
+                    <Button outline onClick={this.toggleCommentModal}>
+                        <span className="fa fa-pencil fa-lg"></span> Submit Comment
+                    </Button>
+                    <Modal isOpen={this.state.isCommentModalOpen} toggle={this.toggleCommentModal}>
+                        <ModalHeader toggle={this.toggleCommentModal}>Submit Comment</ModalHeader>
+                        <ModalBody>
+                            <LocalForm >
+                                <div className="form-group">
+                                    <Label htmlFor="rating">Rating</Label>
+                                        <Control.select model=".rating" name="rating"
+                                                className="form-control">
+                                                <option>1</option>
+                                                <option>2</option>
+                                                <option>3</option>
+                                                <option>4</option>
+                                                <option>5</option>
+                                        </Control.select>
+                                </div>
+                                <div className="form-group">
+                                    <Label htmlFor="fullname">Your Name</Label>
+                                    <Control.text model=".fullname" id="fullname" name="fullname"
+                                                placeholder="Your Name" className="form-control"
+                                                validators={{
+                                                    required, minLength: minLength(3), maxLength: maxLength(15)
+                                                }}
+                                                 />
+                                    <Errors
+                                            className="text-danger"
+                                            model=".fullname"
+                                            show="touched"
+                                            messages={{
+                                                required: 'Required',
+                                                minLength: 'Must be at least 3 characters',
+                                                maxLength: 'Must be 15 characters or less'
+                                            }}
+                                        />                                                
+                                </div>
+                                <div className="form-group">
+                                    <Label htmlFor="comment">Comment</Label>
+                                    <Control.textarea className="form-control" rows="6" 
+                                        model=".comment" id="comment" name="comment"
+                                        validators={{
+                                            required, minLength: minLength(3), maxLength: maxLength(500)
+                                        }}
+                                         />
+                                    <Errors
+                                        className="text-danger"
+                                        model=".comment"
+                                        show="touched"
+                                        messages={{
+                                            required: 'Required',
+                                            minLength: 'Must be at least 3 characters',
+                                            maxLength: 'Must be 500 characters or less'
+                                        }}
+                                     />                                        
+                                </div>
+                                <Button type="submit" value="submit" color="bg-primary">Login</Button>
+                            </LocalForm>
+                        </ModalBody>
+                    </Modal>
+                </React.Fragment>                
+            )
+        }
+    }
 
     function RenderDish({dish}) {
         if (dish != null) {
@@ -24,17 +116,20 @@ import { Link } from 'react-router-dom';
     function RenderComments({comments}) {
         if (comments != null) {
             return (
-                <div className="col-12 col-md-5 m-1">
-                    <h4>Comments</h4>
-                        {comments.map(comment => {
-                            return (
-                                <ul key={comment.id} className="list-unstyled">
-                                    <li>{comment.comment}</li>
-                                    <li>--{comment.author}, {new Date(comment.date).toLocaleDateString('en-US', {year: 'numeric', month: 'short', day: 'numeric'})}</li>
-                                </ul>
-                            )
-                        })}
-                </div>
+                    <React.Fragment>
+                        <div className="col-12 col-md-5 m-1">
+                            <h4>Comments</h4>
+                                {comments.map(comment => {
+                                    return (
+                                        <ul key={comment.id} className="list-unstyled">
+                                            <li>{comment.comment}</li>
+                                            <li>--{comment.author}, {new Date(comment.date).toLocaleDateString('en-US', {year: 'numeric', month: 'short', day: 'numeric'})}</li>
+                                        </ul>
+                                    )
+                                })}
+                            <CommentForm />
+                        </div>                        
+                    </React.Fragment>
             );
         } else {
             return(
