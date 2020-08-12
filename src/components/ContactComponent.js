@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Breadcrumb, BreadcrumbItem, Button, Label, Col, Row} from 'reactstrap';
 import { Link } from 'react-router-dom'
-import { Control, Form, Errors, actions } from 'react-redux-form';
+import { Control, Form, Errors } from 'react-redux-form';
+import { postFeedback } from '../redux/ActionsCreators';
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !(val) || (val.length <= len);
@@ -13,13 +14,13 @@ class Contact extends Component {
     constructor(props) {
         super(props)
 
-
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleSubmit(values) {
-        console.log(`Current State is: ${JSON.stringify(values)}`);
-        alert("Current State is: " + JSON.stringify(values));
+        console.log(postFeedback);
+        this.props.postFeedback(values);
+        alert("Thank you for your feedback!\n" + JSON.stringify(values));
         this.props.resetFeedbackForm();
     }
 
@@ -56,8 +57,8 @@ class Contact extends Component {
                     </div>
                     <div className="col-12 col-sm-11 offset-sm-1">
                         <div className="btn-group" role="group">
-                            <a role="button" className="btn btn-primary" href="tel:+85212345678"><i className="fa fa-phone"></i> Call</a>
-                            <a role="button" className="btn btn-info"><i className="fa fa-skype"></i> Skype</a>
+                            <a role="button" className="btn btn-primary" href="#" alt="tel:+85212345678"><i className="fa fa-phone"></i> Call</a>
+                            <a role="button" className="btn btn-info" href="#"><i className="fa fa-skype"></i> Skype</a>
                             <a role="button" className="btn btn-success" href="mailto:confusion@food.net"><i className="fa fa-envelope-o"></i> Email</a>
                         </div>
                     </div>
